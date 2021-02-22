@@ -23,7 +23,7 @@ class App
     time_formatter = TimeFormatter.new(param)
     time_formatter.call
 
-    if time_formatter.access?
+    if time_formatter.success?
       response(time_formatter.time, 200)
     else
       response(time_formatter.invalid, 400)

@@ -7,13 +7,18 @@ class TimeFormatter
 
   def initialize(params)
     @user_params = params
-    @access_format = %w(year month day hour minute second)
+    @access_format = TIME.keys.join(',').split(',')
     @valid_time = []
+    @invalid_time = []
   end
 
   def call
     @user_params.each do |param|
-      @valid_time << TIME[param.to_sym]
+      if success?
+        @valid_time << TIME[param.to_sym]
+      else
+        @invalid_time = unknown_format
+      end
     end
   end
 
@@ -21,7 +26,7 @@ class TimeFormatter
     Time.now.strftime(@valid_time*"-")
   end
 
-  def access?
+  def success?
     (@user_params - @access_format).empty?
   end
 
@@ -30,6 +35,6 @@ class TimeFormatter
   end
 
   def invalid
-    "Unknown time format #{unknown_format}"
+    "Unknown time format #{@invalid_time}"
   end
 end
